@@ -62,3 +62,7 @@ project.md
 # segredos (gerenciados no Infisical)
 .env.*
 !.env.example
+
+# Arquivos grandes de midia/dados - nao versionar (Claude Code)
+*.mp4
+*.mkv

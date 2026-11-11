@@ -49,10 +49,10 @@ except Exception:
 # every major vertical-video platform. Do not drop this below ~75 without a
 # specific reason.
 SUB_FORCE_STYLE = (
-    "FontName=Helvetica,FontSize=18,Bold=1,"
+    "FontName=Helvetica,FontSize=11,Bold=1,"
     "PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BackColour=&H00000000,"
     "BorderStyle=1,Outline=2,Shadow=0,"
-    "Alignment=2,MarginV=90"
+    "Alignment=2,MarginV=35"
 )
 
 # -------- Helpers ------------------------------------------------------------
@@ -537,7 +537,10 @@ def build_final_composite(
 
     # Subtitles LAST — Rule 1
     if has_subs:
-        subs_abs = str(subtitles_path.resolve()).replace(":", r"\:").replace("'", r"\'")
+        # On Windows, ffmpeg's subtitles filter chokes on backslashes; use
+        # forward slashes and escape the drive-letter colon. This is portable:
+        # POSIX paths have no backslashes, so the replace is a no-op there.
+        subs_abs = str(subtitles_path.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
         filter_parts.append(
             f"{current}subtitles='{subs_abs}':force_style='{SUB_FORCE_STYLE}'[outv]"
         )
